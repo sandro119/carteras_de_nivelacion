@@ -1,0 +1,61 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Project {
+  id    String @id @default(cuid())
+  name  String
+  portfolioProjects portfolioProject[]
+  machineRemittances machineRemittance[]
+  withdrawalRemittances withdrawalRemittance[]
+  TotVolIzq Float
+  TotVolDer Float
+}
+
+model portfolioProject {
+  id    String @id @default(cuid())
+  description String
+  abscisa Float
+  biCotaNegra Float
+  ejeCotaNegra Float
+  bdCotaNegra Float
+  biCotaSubrasante Float
+  ejeCotaSubrasante Float
+  bdCotaSubrasante Float
+  acIzquierda Float
+  acDerecha Float
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId String
+}
+
+model machineRemittance {
+  id    String @id @default(cuid())
+  name  String
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId String
+  machineRemittanceDetails machineRemittanceDetail[]
+}
+
+model machineRemittanceDetail {
+  id    String @id @default(cuid())
+  date  String
+  startHour String
+  endHour String
+  machineRemittance machineRemittance @relation(fields: [machineRemittanceId], references: [id], onDelete: Cascade)
+  machineRemittanceId String
+}
+
+model withdrawalRemittance {
+  id    String @id @default(cuid())
+  date  String
+  remittanceNumber String
+  meters3 String
+  observations String
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId String
+}
